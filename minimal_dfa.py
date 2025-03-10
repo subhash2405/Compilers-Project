@@ -329,7 +329,7 @@ def print_min_dfa_table(min_dfa_states, min_dfa_transitions, min_dfa_initial, mi
 # Main function to process the regex and print tables at each step
 def main():
     # Example regular expression (replace with your input)
-    infix = "a|b"
+    infix = "a.b"
     infixes = ["a.b.c*", "a.(b|d).c*", "(a.(b|d))*", "a.(b.b)*.c"]
     strings = ["", "abc", "abbc", "abcc", "abad", "abbbc"]
     print(f"Processing regular expression: {infix}\n")

@@ -110,3 +110,13 @@ def print_min_dfa_table(min_dfa_states, min_dfa_transitions, min_dfa_initial, mi
             next_state = min_dfa_transitions[min_state].get(symbol, frozenset())
             row += min_dfa_state_names.get(next_state, "{}") + "\t"
         print(row.rstrip())
+
+def validate_string(input_str, min_dfa_transitions, min_dfa_initial, min_dfa_accepting, alphabet):
+    print("Test String : " + input_str)
+    current_state = min_dfa_initial
+    for char in input_str:
+        if char not in alphabet:
+            return False  # Character not in the DFA's alphabet, so reject.
+        current_state = min_dfa_transitions[current_state].get(char, frozenset())
+    return current_state in min_dfa_accepting
+

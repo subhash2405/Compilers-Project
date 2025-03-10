@@ -4,10 +4,10 @@ import NFAtoDFA
 
 
 def main():
-    # Example regular expression (replace with your input)
-    infix = "a.b.c*"
-    infixes = ["a.b.c*", "a.(b|d).c*", "(a.(b|d))*", "a.(b.b)*.c"]
-    strings = ["", "abc", "abbc", "abcc", "abad", "abbbc"]
+    infix = "a.b|c*"
+    test_string = "abc"
+    # infixes = ["a.b.c*", "a.(b|d).c*", "(a.(b|d))*", "a.(b.b)*.c"]
+    # strings = ["", "abc", "abbc", "abcc", "abad", "abbbc"]
     print(f"Processing regular expression: {infix}\n")
     
     # Step 1: Convert to postfix and build ε-NFA
@@ -26,6 +26,8 @@ def main():
         dfa_states, dfa_transitions, dfa_accepting, alphabet
     )
     DFAtoMINDFA.print_min_dfa_table(min_dfa_states, min_dfa_transitions, min_dfa_initial, min_dfa_accepting, alphabet)
+
+    print(DFAtoMINDFA.validate_string(test_string,min_dfa_transitions,min_dfa_initial,min_dfa_accepting, alphabet))
 
 if __name__ == "__main__":
     main()

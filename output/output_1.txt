@@ -1,0 +1,42 @@
+Enter infix expression:
+Enter test expression:
+Processing regular expression: (a|b)*.a.b.b
+
+ε-NFA Transition Table:
+State	a	b	ε
+0 (initial)	{}	{}	{1,2}
+1	{}	{}	{3,4}
+2	{}	{}	{5}
+3	{6}	{}	{}
+4	{}	{7}	{}
+5	{8}	{}	{}
+6	{}	{}	{9}
+7	{}	{}	{9}
+8	{}	{}	{10}
+9	{}	{}	{1,2}
+10	{}	{11}	{}
+11	{}	{}	{12}
+12	{}	{13}	{}
+13 (accept)	{}	{}	{}
+
+DFA Transition Table:
+State	a	b
+A (initial)	B	C
+B	B	D
+C	B	C
+D	B	E
+E (accept)	B	C
+
+Minimal DFA Transition Table:
+State	a	b
+A (initial)	B	A
+B	B	C
+C	B	D
+D (accept)	B	A
+
+Validation result:
+Test String : abb
+True
+
+Assembly code generated in 'regex.asm'
+Graphviz .dot file saved to: /Users/siddharthsingh/Documents/Compilers-Project/minimal_dfa_graphs/graph1.dot

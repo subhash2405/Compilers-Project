@@ -6,56 +6,57 @@ def epsilon_closure(state_ids, trans):
     stack = list(state_ids)
     while stack:
         state_id = stack.pop()
-        for next_id in trans[state_id]['ε']:
+        for next_id in trans[state_id].get('ε', []):
             if next_id not in closure:
                 closure.add(next_id)
                 stack.append(next_id)
     return frozenset(closure)
 
-# Compute the set of states reachable by a symbol
 def move(state_ids, symbol, trans):
     """Compute the set of states reachable by a symbol from a set of state IDs."""
     next_states = set()
     for state_id in state_ids:
-        next_states.update(trans[state_id][symbol])
+        next_states.update(trans[state_id].get(symbol, []))
     return frozenset(next_states)
 
-# Build the DFA from the ε-NFA
 def build_dfa(nfa, trans, state_to_id, alphabet):
     """Build a DFA from the ε-NFA using subset construction."""
     initial_closure = epsilon_closure({state_to_id[nfa.initial]}, trans)
-    dfa_states = [initial_closure]
+    dfa_states = []
     dfa_transitions = {}
     queue = deque([initial_closure])
-    marked = set()
-    
+    visited = set()
+
     while queue:
         current = queue.popleft()
-        if current in marked:
+        if current in visited:
             continue
-        marked.add(current)
+        visited.add(current)
+        dfa_states.append(current)
         for symbol in alphabet:
             next_move = move(current, symbol, trans)
             if next_move:
                 next_closure = epsilon_closure(next_move, trans)
-                if next_closure not in dfa_states:
-                    dfa_states.append(next_closure)
-                    queue.append(next_closure)
                 dfa_transitions[(current, symbol)] = next_closure
+                if next_closure not in visited and next_closure not in queue:
+                    queue.append(next_closure)
             else:
+                # Transition to dead state
                 dfa_transitions[(current, symbol)] = frozenset()
-    
-    # Add dead state (empty set) if not present and set its transitions
-    if frozenset() not in dfa_states:
-        dfa_states.append(frozenset())
-    for symbol in alphabet:
-        dfa_transitions[(frozenset(), symbol)] = frozenset()
-    
+
+    # Add dead state only if it is referenced
+    if any(state == frozenset() for state in dfa_transitions.values()):
+        if frozenset() not in dfa_states:
+            dfa_states.append(frozenset())
+        for symbol in alphabet:
+            dfa_transitions[(frozenset(), symbol)] = frozenset()
+
     # Identify accepting states
     dfa_accepting = {state for state in dfa_states if state_to_id[nfa.accept] in state}
+
     return dfa_states, dfa_transitions, initial_closure, dfa_accepting
 
-# Print the DFA transition table
+
 def print_dfa_table(dfa_states, dfa_transitions, dfa_initial, dfa_accepting, alphabet):
     """Print the transition table for the DFA."""
     dfa_state_names = {state: chr(65 + i) for i, state in enumerate(dfa_states)}
@@ -71,4 +72,5 @@ def print_dfa_table(dfa_states, dfa_transitions, dfa_initial, dfa_accepting, alp
             next_state = dfa_transitions.get((dfa_state, symbol), frozenset())
             row += dfa_state_names.get(next_state, "{}") + "\t"
         print(row.rstrip())
+
 

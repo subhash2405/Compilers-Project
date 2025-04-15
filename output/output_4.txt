@@ -1,0 +1,46 @@
+Enter infix expression:
+Enter test expression:
+Processing regular expression: a.(b|c|d).(e*)
+
+ε-NFA Transition Table:
+State	a	b	c	d	e	ε
+0 (initial)	{1}	{}	{}	{}	{}	{}
+1	{}	{}	{}	{}	{}	{2}
+2	{}	{}	{}	{}	{}	{3,4}
+3	{}	{}	{}	{}	{}	{5,6}
+4	{}	{}	{}	{7}	{}	{}
+5	{}	{8}	{}	{}	{}	{}
+6	{}	{}	{9}	{}	{}	{}
+7	{}	{}	{}	{}	{}	{10}
+8	{}	{}	{}	{}	{}	{11}
+9	{}	{}	{}	{}	{}	{11}
+10	{}	{}	{}	{}	{}	{12}
+11	{}	{}	{}	{}	{}	{10}
+12	{}	{}	{}	{}	{}	{13,14}
+13	{}	{}	{}	{}	{15}	{}
+14 (accept)	{}	{}	{}	{}	{}	{}
+15	{}	{}	{}	{}	{}	{13,14}
+
+DFA Transition Table:
+State	a	b	c	d	e
+A (initial)	B	G	G	G	G
+B	G	C	D	E	G
+C (accept)	G	G	G	G	F
+D (accept)	G	G	G	G	F
+E (accept)	G	G	G	G	F
+F (accept)	G	G	G	G	F
+G	G	G	G	G	G
+
+Minimal DFA Transition Table:
+State	a	b	c	d	e
+A (initial)	B	D	D	D	D
+B	D	C	C	C	D
+C (accept)	D	D	D	D	C
+D	D	D	D	D	D
+
+Validation result:
+Test String : adeee
+True
+
+Assembly code generated in 'regex.asm'
+Graphviz .dot file saved to: /Users/siddharthsingh/Documents/Compilers-Project/minimal_dfa_graphs/graph4.dot
